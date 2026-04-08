@@ -580,16 +580,17 @@ footer a:hover { color: var(--red); }
       </button>
     </div>
   </header>
-  <!-- Menú móvil -->
-  <div class="mobile-menu" id="mobileMenu">
-    <button onclick="navTo('inicio')"       data-es="Inicio"    data-en="Home">Inicio</button>
-    <button onclick="navTo('servicios')"    data-es="Servicios" data-en="Services">Servicios</button>
-    <button onclick="navTo('nosotros')"     data-es="Nosotros"  data-en="About">Nosotros</button>
-    <button onclick="navTo('analisis')"     data-es="Análisis"  data-en="Analysis">Análisis</button>
-    <button onclick="navTo('contacto')"     data-es="Contacto"  data-en="Contact">Contacto</button>
-    <a class="menu-contact" href="mailto:hegemonica.mx@gmail.com">hegemonica.mx@gmail.com</a>
-  </div>
 </template>
+
+<!-- ─── MENÚ MÓVIL GLOBAL ─────────────────────────────────────────────── -->
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="navTo('inicio')"     data-es="Inicio"    data-en="Home">Inicio</button>
+  <button onclick="navTo('servicios')"  data-es="Servicios" data-en="Services">Servicios</button>
+  <button onclick="navTo('nosotros')"   data-es="Nosotros"  data-en="About">Nosotros</button>
+  <button onclick="navTo('analisis')"   data-es="Análisis"  data-en="Analysis">Análisis</button>
+  <button onclick="navTo('contacto')"   data-es="Contacto"  data-en="Contact">Contacto</button>
+  <a class="menu-contact" href="mailto:hegemonica.mx@gmail.com">hegemonica.mx@gmail.com</a>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 <!-- INICIO                                                              -->
@@ -920,17 +921,19 @@ function setLang(lang) { /* reservado para uso futuro */ }
 
 // ─── Menú hamburguesa
 function toggleMenu() {
-  const btn = document.getElementById('hamburger');
   const menu = document.getElementById('mobileMenu');
-  if (btn && menu) {
-    btn.classList.toggle('open');
-    menu.classList.toggle('open');
-    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
-  }
+  const btns = document.querySelectorAll('.hamburger');
+  const isOpen = menu.classList.toggle('open');
+  btns.forEach(b => isOpen ? b.classList.add('open') : b.classList.remove('open'));
+  document.body.style.overflow = isOpen ? 'hidden' : '';
 }
 
 function navTo(id) {
-  toggleMenu();
+  const menu = document.getElementById('mobileMenu');
+  const btns = document.querySelectorAll('.hamburger');
+  menu.classList.remove('open');
+  btns.forEach(b => b.classList.remove('open'));
+  document.body.style.overflow = '';
   showSection(id);
 }
 
