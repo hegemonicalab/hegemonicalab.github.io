@@ -467,8 +467,49 @@ footer a:hover { color: var(--red); }
   .stat { border-right: none; border-bottom: 1px solid var(--line); padding: 0 0 2rem 0 !important; }
   .stat:last-child { border-bottom: none; }
   .blog-grid { grid-template-columns: 1fr; }
-  .header-inner { grid-template-columns: 1fr auto; height: auto; padding: 1.5rem 2rem; }
+  .header-inner { grid-template-columns: 1fr auto auto; height: auto; padding: 1.25rem 1.5rem; gap: 1rem; }
   .header-nav { display: none; }
+  .header-contact { display: none; }
+  .hamburger { display: flex; }
+}
+
+/* ─── HAMBURGUESA ────────────────────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; gap: 5px;
+  background: none; border: none; cursor: pointer;
+  padding: 0.5rem; z-index: 200;
+}
+.hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--off-white);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--night); z-index: 100;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 2.5rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu button, .mobile-menu a {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.6rem; font-weight: 400; font-style: italic;
+  color: var(--off-white); background: none; border: none;
+  cursor: pointer; text-decoration: none;
+  transition: color 0.2s;
+}
+.mobile-menu button:hover, .mobile-menu a:hover { color: var(--red); }
+.mobile-menu .menu-contact {
+  font-size: 0.85rem; font-style: normal;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--red); margin-top: 1rem;
+  border-bottom: 1px solid var(--red); padding-bottom: 2px;
 }
 @media (max-width: 700px) {
   .container { padding: 0 1.5rem; }
@@ -487,14 +528,8 @@ footer a:hover { color: var(--red); }
 .hero-quote   { animation: fadeUp 0.6s ease both; animation-delay: 0.3s; }
 .hero-stats   { animation: fadeUp 0.6s ease both; animation-delay: 0.5s; }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-/* Animación de navegación: fade completo de página */
-.page.active {
-  animation: fadeIn 0.3s ease both;
-}
+
+
 
 /* Hover línea roja — blog cards */
 .blog-card {
@@ -540,8 +575,20 @@ footer a:hover { color: var(--red); }
       </nav>
       <a class="header-contact" href="mailto:hegemonica.mx@gmail.com"
          data-es="Iniciar conversación →" data-en="Start a conversation →">Iniciar conversación →</a>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
+  <!-- Menú móvil -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button onclick="navTo('inicio')"       data-es="Inicio"    data-en="Home">Inicio</button>
+    <button onclick="navTo('servicios')"    data-es="Servicios" data-en="Services">Servicios</button>
+    <button onclick="navTo('nosotros')"     data-es="Nosotros"  data-en="About">Nosotros</button>
+    <button onclick="navTo('analisis')"     data-es="Análisis"  data-en="Analysis">Análisis</button>
+    <button onclick="navTo('contacto')"     data-es="Contacto"  data-en="Contact">Contacto</button>
+    <a class="menu-contact" href="mailto:hegemonica.mx@gmail.com">hegemonica.mx@gmail.com</a>
+  </div>
 </template>
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -870,6 +917,22 @@ function applyLang(lang) {
 }
 
 function setLang(lang) { /* reservado para uso futuro */ }
+
+// ─── Menú hamburguesa
+function toggleMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  if (btn && menu) {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+}
+
+function navTo(id) {
+  toggleMenu();
+  showSection(id);
+}
 
 // Browser back/forward
 window.addEventListener('popstate', e => {
